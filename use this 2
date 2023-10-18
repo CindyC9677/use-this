@@ -1,0 +1,144 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAXSIZE 150
+
+int inputCaesar(char inputString[MAXSIZE])
+{
+   // prompt user for string to be encoded/decoded
+   // prompt for offset (how many shifts to the right for the encoding)
+   // check and only accept valid input
+   //         (character string and whole number between 1 and 25 inclusive)
+
+   printf("Enter the input string: ");            // provided prompt for input string
+   //char workString[100];
+   //scanf("%s",str);
+   gets(inputString); // using gets instead of scanf so spaces can be outputed
+   //printf("%s\n",inputString);
+
+
+   //printf("Enter the shift value (1 to 25): ");   // provided prompt for shift value
+   int offSet; // initializing an integer type variable used to store the number of places the string will be offset
+   //scanf("%d",&offSet);
+
+   do {
+       printf("Enter the shift value (1 to 25): ");   // provided prompt for shift value
+       scanf("%d",&offSet);
+       //printf("\n%d",offSet);
+
+   }while (offSet>25 || offSet<1 ); // need to test for character
+
+
+
+
+/* code to test for character
+printf("Enter the shift value (1 to 25): ");   // provided prompt for shift value
+scanf("%d",&offSet);
+if (isdigit(offSet)==0){
+    printf("Not a digit",offSet);
+}
+else{
+    printf("digit");
+}
+
+*/
+/* not sure why int offSet is impacting, the while condition tests inside or outside offset?
+   if (offSet>0 && offSet<26){
+        printf("\n%d",offSet);
+   }
+   else {
+        while (offSet>25 || offSet<1){
+            printf("Enter the shift value (1 to 25): ");   // provided prompt for shift value
+            int offSet;
+            scanf("%d",&offSet);
+        }
+
+   }
+   */
+
+// might need to do a do while
+   char newinputString[MAXSIZE];
+   strcpy(newinputString, inputString); // copying the content of inputString array into newinputString
+
+   return offSet;
+
+}
+
+// passing workString and offsetShift into parameter list
+void encodeCaesar(char sentInputString[MAXSIZE], int shiftFactor)
+{
+   // declaring new array which will store the encoded aray
+   char encodedString[MAXSIZE];
+   for (int i=0; sentInputString[i];i++){ // for number of characters in string, convert each character to uppercase letters, stops at the end from built in null in arrays
+        sentInputString[i]=toupper(sentInputString[i]); // array character at i location is put through the toupper function to conver them
+   }
+   printf("%s",sentInputString);
+
+    // cycling through each character in the string
+    for (int i=0;sentInputString[i];i++){
+            // checking to see if element is a space or special character, if not, proceed
+            if (sentInputString[i]!=' ' && sentInputString[i]!=',' && sentInputString[i]!='@' && sentInputString[i]!='!' && sentInputString[i]!='#'&& sentInputString[i]!='$'&& sentInputString[i]!='%' && sentInputString[i]!='&' && sentInputString[i]!='*'){
+                // casting sentEncodedString from a string to an integer
+                int number=(int)sentInputString[i];
+                // subtracting A to establish a reference point where shift factor can be added based on user input, 26 is added to ensure the value stays positive and %26
+                // is used to keep it within the range of 0-25, this ensures it Z loops back to A if the shift factor is 1, add A to go back to original value
+                sentInputString[i]='A'+(sentInputString[i]-'A'+shiftFactor)%26;
+            }
+
+    }
+    //printf("%s",sentInputString);
+
+
+   strcpy( encodedString, sentInputString); // copying content of sentInputString into encodedString
+   strcpy( sentInputString, encodedString); // copying content of encodedString into sentInputString
+   //return sentInputString; // no need for return since its an array, autopmatically uses pointers to modify the data in memory
+
+}
+
+// passing workString and offsetShift into parameter list
+void decodeCaesar(char sentEncodedString[MAXSIZE], int shiftFactor)
+{
+   char decodedString[MAXSIZE];
+   strcpy( decodedString, sentEncodedString); // do we need to have this
+   //printf("testing%s",sentEncodedString);
+   strcpy( sentEncodedString, decodedString);
+
+   // cycling through each character in the string
+   for (int i=0;sentEncodedString[i];i++){
+        // checking to see if element is a space or special character, if not, proceed
+        if (sentEncodedString[i]!=' ' && sentEncodedString[i]!=',' && sentEncodedString[i]!='@' && sentEncodedString[i]!='!' && sentEncodedString[i]!='#'&& sentEncodedString[i]!='$'&& sentEncodedString[i]!='%' && sentEncodedString[i]!='&' && sentEncodedString[i]!='*'){
+            // casting sentEncodedString from a string to an integer
+            int number=(int)sentEncodedString[i];
+            // subtracting A to establish a reference point where shift factor can be subtracted, 26 is added to ensure the value stays positive and %26
+            // is used to keep it within the range of 0-25, this ensures it Z loops back to A if the shift factor is 1, add A to go back to original value
+            sentEncodedString[i]='A'+(sentEncodedString[i]-'A'-shiftFactor+26)%26;
+        }
+    }
+}
+
+int main()
+{
+    char workString[MAXSIZE];  // the character array that will hold hold the working string.
+    int offsetShift;           // the offset value of how many shifts to the right.
+
+    printf("\nCaesar Encoding Program\n\n");
+
+    // prompt for work string to be encoded/decoded and return the code offset value
+    offsetShift = inputCaesar(workString);
+    printf("\n\noffset: %d\ninput: ",offsetShift); //changed to not print out string
+
+    // send the user input string and offset to the encoding function
+    encodeCaesar(workString, offsetShift);
+    printf("\nencoded: %s",workString);
+
+    // send the encoded string and offset to the decoding function
+    decodeCaesar(workString, offsetShift);
+    printf("\ndecoded: %s\n",workString);
+
+    printf("\nEnd Assignment 2 - Project A\n");
+    printf("Cindy Cao ccao82 251228895\n\n");
+
+    return 0;
+}
+
